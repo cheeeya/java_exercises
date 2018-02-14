@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;IntSequence.java&apos; to &apos;lab06/(default package)&apos;&#x0D;&#x0A;- Original project: &apos;lab05&apos;&#x0D;&#x0A;- Destination element: &apos;lab06/(default package)&apos;&#x0D;&#x0A;- Original element: &apos;IntSequence.java&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="=lab06/&lt;" element1="/&lt;{IntSequence.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1435700955769" units="1" version="1.0"/>
+</session>

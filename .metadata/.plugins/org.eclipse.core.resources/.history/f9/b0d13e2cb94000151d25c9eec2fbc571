@@ -1,0 +1,98 @@
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Stack;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.LinkedHashSet;
+import java.io.IOException;
+
+public class Solver {
+
+	private Stack<Board> fringe;
+	private HashSet<Board> visited;
+
+	public Solver(Board i) {
+		fringe = new Stack<Board>();
+		visited = new HashSet<Board>();
+		fringe.push(i);
+	}
+
+	public static void main(String[] args) {
+		try {
+			String initFile = args[0];
+			String goalFile = args[1];
+			Scanner scan = new Scanner(new File(initFile));
+			Scanner scan2 = new Scanner(new File(goalFile));
+			ArrayList<String> initialConfig = new ArrayList<String>();
+			ArrayList<String> goalConfig = new ArrayList<String>();
+			while (scan.hasNextLine()) {
+				initialConfig.add(scan.nextLine());
+			}
+			scan.close();
+			while (scan2.hasNextLine()) {
+				goalConfig.add(scan2.nextLine());
+			}
+			scan2.close();
+			String[] dimensions = initialConfig.remove(0).split(" ");
+			Board initial = new Board(Integer.parseInt(dimensions[0]),
+					Integer.parseInt(dimensions[1]));
+			Board goal = new Board(Integer.parseInt(dimensions[0]),
+					Integer.parseInt(dimensions[1]));
+			addToBoard(initial, initialConfig);
+			addToBoard(goal, goalConfig);
+			Solver work = new Solver(initial);
+			work.solve(initial, goal);
+		} catch (IOException | RuntimeException e) {
+			System.out.println("Invalid init and/or goal file");
+			System.exit(1);
+		}
+	}
+
+	private static void addToBoard(Board t, ArrayList<String> config)
+			throws IllegalArgumentException {
+		String[] blocks;
+		int[] coordinates;
+		for (int k = 0; k < config.size(); k++) {
+			blocks = config.get(k).split(" ");
+			coordinates = new int[4];
+			for (int l = 0; l < 4; l++) {
+				coordinates[l] = Integer.parseInt(blocks[l]);
+			}
+			t.add(coordinates);
+		}
+	}
+
+	private void solve(Board i, Board g) {
+		while (!fringe.isEmpty()) {
+			Board t = fringe.pop();
+			visited.add(t);
+			t.getMoves();
+			if (t.boardMatch(g)) {
+				Board sol = t;
+				Stack<int[]> solution = new Stack<int[]>();
+				while (!sol.equals(i)) {
+					solution.push(sol.getMoveMade());
+					sol = sol.getParent();
+				}
+				while (!solution.isEmpty()) {
+					int[] move = solution.pop();
+					for (int k = 0; k < 4; k++) {
+						System.out.print(move[k] + " ");
+					}
+					System.out.println("");
+				}
+				return;
+			}
+			ArrayList<Board> possibles = t.neighbors();
+			for (Board tr : possibles) {
+				if (!visited.contains(tr)) {
+					fringe.push(tr);
+				}
+			}
+
+		}
+	}
+
+}

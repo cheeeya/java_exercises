@@ -1,0 +1,9 @@
+
+public class Circle {
+
+	public static void main(String[] args) {
+		StdDraw.setScale(5.0, 5.0);
+		StdDraw.circle(1.0, 1.0 , 1);	
+	}
+
+}

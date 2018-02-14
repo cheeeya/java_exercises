@@ -1,0 +1,14 @@
+Alpha - Merge sort
+	has consistent comparisons accross the board, but with many movements indicating the merging of the smaller lists
+
+Beta - Insertion Sort
+	when sorting a sorted listed, there are N comparisons made
+
+Gamma - Quick Sort
+	when sorting a sorted list, has n-1 movements with n^2 comparisons
+
+Delta - Heap Sort
+	has consistent comparisons accross the board, smaller ratio of movements to comparisons than merge
+
+Epsilon - Selection Sort
+	when sorting a sorted list, makes (n * n-1)/2 comparisons with no movement/swaps

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;AbstractListNodeTest.java&apos; to &apos;lab10/(default package)&apos;&#x0D;&#x0A;- Original project: &apos;lab09&apos;&#x0D;&#x0A;- Destination element: &apos;lab10/(default package)&apos;&#x0D;&#x0A;- Original element: &apos;AbstractListNodeTest.java&apos;" description="Copy compilation unit" destination="=lab10/&lt;" element1="/&lt;{AbstractListNodeTest.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1436472101189" units="1" version="1.0"/>
+</session>

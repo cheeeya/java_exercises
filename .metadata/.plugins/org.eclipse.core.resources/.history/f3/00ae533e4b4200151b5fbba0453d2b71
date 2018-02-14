@@ -1,0 +1,24 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+
+public class SplayTreeTest {
+
+	@Test
+	public void testSplay() {
+		SplayTree<Integer, String> st = new SplayTree<>();
+		st.put(1, "one");
+		System.out.println(st);
+		st.put(2, "two");
+		System.out.println(st);
+		st.put(3, "three");
+		System.out.println(st);
+		st.put(4, "four");
+		System.out.println(st);
+		st.put(5, "five");
+		System.out.println(st);
+		st.get(5);
+		System.out.println(st);
+	}
+}

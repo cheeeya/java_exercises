@@ -1,0 +1,103 @@
+package practice;
+
+import java.util.Arrays;
+
+import Tray.Piece;
+
+public class Zombie {
+
+	protected String name;
+
+	public Zombie(String name) {
+		this.name = name;
+		System.out.println(name + " wants BRAINS!");
+	}
+
+	public void bite() {
+		System.out.println("Nom nom nom!");
+	}
+
+	public void bite(Zombie z) {
+		System.out.println(z.name + ", is that you?");
+	}
+
+	public void bite(FastZombie z) {
+		System.out.println("Not... Possible...");
+	}
+
+	private class Piece {
+		private int[] myCoords;
+
+		public Piece(int[] coordinates) {
+			myCoords = coordinates;
+		}
+
+		public int height() {
+			return myCoords[2] - myCoords[0] + 1;
+		}
+
+		public int width() {
+			return myCoords[3] - myCoords[1] + 1;
+		}
+
+		public int getY() {
+			return myCoords[0];
+		}
+
+		public int getX() {
+			return myCoords[1];
+		}
+
+		public int[] getCoords() {
+			return myCoords;
+		}
+
+		@Override
+		public int hashCode() {
+			String hash = "";
+			hash += getY();
+			hash += height();
+			hash += getX();
+			hash += width();
+			return Integer.parseInt(hash);
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			Piece p = (Piece) o;
+			return Arrays.equals(myCoords, p.getCoords());
+		}
+	}
+
+	public static void main(String[] args) {
+		Piece[][] twod = new Piece[4][4];
+		int[] arr = new int[] { 1, 2, 3, 4 };
+		int[] arr2 = new int[] { 2, 3, 4, 5 };
+		int[] arr3 = new int[] { 3, 4, 5, 6 };
+		int[] arr4 = new int[] { 4, 5, 6, 7 };
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (j == 2) {
+					twod[i][j] = new Piece(arr2);
+				} else {
+					twod[i][j] = new Piece(arr);
+				}
+			}
+		}
+		System.out.println(java.util.Arrays.deepHashCode(twod));
+
+		Piece[][] twod2 = new Piece[4][4];
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (j == 2) {
+					twod2[i][j] = new Piece(arr2);
+				} else {
+					twod2[i][j] = new Piece(arr);
+				}
+			}
+		}
+		System.out.println(java.util.Arrays.deepHashCode(twod2));
+
+		System.out.println(Arrays.deepEquals(twod2, twod));
+	}
+}

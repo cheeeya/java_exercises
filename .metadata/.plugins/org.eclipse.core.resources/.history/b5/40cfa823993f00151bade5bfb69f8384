@@ -1,0 +1,23 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class PFind {
+	public static void main(String[] args) {
+		File puzz = new File("puzzle.stuff");
+		ArrayList<String> coordinates = new ArrayList<String>();
+		try {
+			Scanner sc = new Scanner(puzz);
+			String pattern = "[A-Za-z][n-z][a-z][A-Z][^mnopqr][mnopqr]";
+			while (sc.hasNextLine()){
+				String s = sc.nextLine();
+				if (s.matches(pattern)){
+					coordinates.add(s);
+				}
+			}
+		} catch (FileNotFoundException e) {
+
+		}
+	}
+}

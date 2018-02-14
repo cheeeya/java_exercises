@@ -1,0 +1,36 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.HashMap;
+
+public class PFind {
+	public static void main(String[] args) {
+		File puzz = new File("puzzle.stuff");
+		HashMap<String, Integer> coordinates = new HashMap<String, Integer>();
+		try {
+			Scanner sc = new Scanner(puzz);
+			String pattern = "[a-zA-Z][^a-m][a-z][A-Z][a-l][mnopqr]";
+			String pattern2 = "[a-zA-Z][^a-m][a-z][A-Z][s-z][mnopqr]";
+			String pattern3 = "[A-Z][^a-m][A-Z][a-z][A-L][MNOPQR]";
+			String pattern31 = "[A-Z][^a-m][A-Z][a-z][S-Z][MNOPQR]";
+			String pattern4 = "[a-z][^a-m][A-Z][a-z][A-L][MNOPQR]";
+			String pattern41 = "[a-z][^a-m][A-Z][a-z][S-Z][MNOPQR]";
+			int lineCount = 0;
+			while (sc.hasNextLine()) {
+				String s = sc.nextLine();
+//				if (s.matches(pattern) || s.matches(pattern2)) {
+//					coordinates.put(s, lineCount);
+//				}
+				if (s.matches(pattern3) || s.matches(pattern4) || s.matches(pattern31) || s.matches(pattern41)){
+					coordinates.put(s, -lineCount);
+				}
+				lineCount += 1;
+			}
+			for (String s1: coordinates.keySet()){
+				System.out.println(s1 + " " + coordinates.get(s1));
+			}
+		} catch (FileNotFoundException e) {
+
+		}
+	}
+}

@@ -1,0 +1,123 @@
+import java.util.Iterator;
+
+/*Kruskals.java*/
+
+/**
+ * Implementation of Kruskal's algorithm for MSTs
+ * 
+ * @author
+ */
+
+public class Kruskals {
+
+	/**
+	 * Returns a new EdgeWeightedGraph that is an MST of the input graph
+	 * 
+	 * @param g
+	 *            the input graph
+	 * @return an MST of the original graph
+	 */
+	public static EdgeWeightedGraph mst(EdgeWeightedGraph g) {
+		int[] disjointSet = new int[g.V()];
+		for (int i = 0; i < disjointSet.length; i++) {
+			disjointSet[i] = -1;
+		}
+		EdgeWeightedGraph mst = new EdgeWeightedGraph(g.V());
+		Bag<Edge> edges = mergeSort((Bag<Edge>) g.edges());
+		System.out.println("sorted edges " + edges.size());
+		for (Edge e : edges) {
+			System.out.println(e);
+			int v = e.either();
+			int w = e.other(v);
+			System.out.println(v + " " + w);
+			if (disjointSet[v] == -1) {
+				if (disjointSet[w] == -1) {
+					disjointSet[v] = w;
+					mst.addEdge(e);
+				} else {
+					int check = w;
+					System.out.println(w + " w parent = " + disjointSet[w]);
+					while (disjointSet[check] != -1 && disjointSet[check] != v) {
+						check = disjointSet[check];
+					}
+					if (disjointSet[check] == -1) {
+						disjointSet[v] = w;
+						mst.addEdge(e);
+					}
+				}
+			} else {
+				if (disjointSet[w] == -1) {
+					int check = v;
+					System.out.println(v + " v parent = " + disjointSet[v]);
+					while (disjointSet[check] != -1 && disjointSet[check] != v) {
+						check = disjointSet[check];
+					}
+					if (disjointSet[check] == -1) {
+						disjointSet[v] = w;
+						mst.addEdge(e);
+					}
+				}
+			}
+		}
+
+		return mst;
+	}
+
+	public static Bag<Edge> mergeSort(Bag<Edge> list) {
+		if (list.size() <= 1) {
+			return list;
+		} else {
+			Bag<Edge> firstHalf = new Bag<Edge>();
+			Bag<Edge> otherHalf = new Bag<Edge>();
+			int counter = 0;
+			for (Edge e : list) {
+				if (counter < list.size() / 2) {
+					System.out.println("first " + e);
+					firstHalf.add(e);
+				} else {
+					System.out.println("second " + e);
+					otherHalf.add(e);
+				}
+				counter += 1;
+			}
+			return merge(mergeSort(firstHalf), mergeSort(otherHalf));
+		}
+	}
+
+	private static Bag<Edge> merge(Bag<Edge> list1, Bag<Edge> list2) {
+		Bag<Edge> rtn = new Bag<Edge>();
+		Iterator<Edge> iter1 = list1.iterator();
+		Iterator<Edge> iter2 = list1.iterator();
+		Edge e1 = null, e2 = null;
+		while (iter1.hasNext() && iter2.hasNext()) {
+			if (e1 == null) {
+				e1 = iter1.next();
+			}
+			if (e2 == null) {
+				e2 = iter2.next();
+			}
+			if (e1.weight() < e2.weight()) {
+				rtn.add(e1);
+				e1 = null;
+			} else {
+				rtn.add(e2);
+				e2 = null;
+			}
+		}
+		while (iter1.hasNext() || e1 != null) {
+			if (e1 == null) {
+				e1 = iter1.next();
+			}
+			rtn.add(e1);
+			e1 = null;
+		}
+		while (iter2.hasNext() || e2 != null) {
+			if (e2 == null) {
+				e2 = iter2.next();
+			}
+			rtn.add(e2);
+			e2 = null;
+		}
+		return rtn;
+	}
+}

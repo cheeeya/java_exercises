@@ -1,0 +1,3 @@
+javac emotions/deep/feelings/gratitude/ThankYou.java emotions/deep/greetings/HelloWorld.java
+
+java -cp emotions/deep greetings.HelloWorld

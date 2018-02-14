@@ -1,0 +1,368 @@
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Arrays;
+
+public class Tray {
+	private int myYLength;
+	private int myXLength;
+	private Piece[][] myPieces; // Piece[y][x]
+	private int[] moveMade;
+	private Tray parent;
+	private LinkedList<Tray> possibleMoves;
+	private ArrayList<Piece> pieces;
+	//
+	private int[][] myPiecesInt;
+	//
+	
+	private ArrayList<int[]> configuration = new ArrayList<>();
+	//
+	public int[][] getMyPiecesInt() {
+		return myPiecesInt;
+	}
+	//
+
+	public Tray(int ylength, int xlength) {
+		myYLength = ylength;
+		myXLength = xlength;
+		myPieces = new Piece[ylength][xlength];
+		possibleMoves = new LinkedList<Tray>();
+		pieces = new ArrayList<Piece>();
+		
+		//
+		myPiecesInt = new int[ylength][xlength];
+		//
+		
+	}
+
+	public Tray(int ylength, int xlength, int[] move, Tray p) {
+		myYLength = ylength;
+		myXLength = xlength;
+		myPieces = new Piece[ylength][xlength];
+		moveMade = move;
+		parent = p;
+		possibleMoves = new LinkedList<Tray>();
+		pieces = new ArrayList<Piece>();
+		
+		//
+		myPiecesInt = new int[ylength][xlength];
+		//
+	}
+
+	public void add(int[] coordinates) {
+		if (coordinates[0] < 0 || coordinates[1] < 0 || coordinates[2] < 0
+				|| coordinates[3] < 0 || coordinates[0] >= myYLength
+				|| coordinates[2] >= myYLength || coordinates[1] >= myXLength
+				|| coordinates[3] >= myXLength) {
+			throw new IllegalArgumentException("Illegal piece coordinates.");
+		}
+		int y = coordinates[0];
+		int x = coordinates[1];
+		int h = coordinates[2] - coordinates[0] + 1;
+		int w = coordinates[3] - coordinates[1] + 1;
+		Piece p = new Piece(y, x, coordinates);
+		pieces.add(p);
+		//
+		int intRep = p.hashCode();
+		//
+		configuration.add(coordinates);
+		for (int i = y; i < y + h; i++) {
+			for (int j = x; j < x + w; j++) {
+				myPieces[i][j] = p;
+				//
+				myPiecesInt[i][j] = intRep;
+				//
+				
+			}
+		}
+	}
+
+	public int[] getMoveMade() {
+		return moveMade;
+	}
+
+	public void getMoves() {
+		for (Piece p : pieces) {
+			if (canMoveUp(p)) {
+				possibleMoves.add(moveUp(p));
+			}
+			if (canMoveDown(p)) {
+				possibleMoves.add(moveDown(p));
+			}
+			if (canMoveLeft(p)) {
+				possibleMoves.add(moveLeft(p));
+			}
+			if (canMoveRight(p)) {
+				possibleMoves.add(moveRight(p));
+			}
+		}
+	}
+
+	public Piece[][] getPieces() {
+		return myPieces;
+	}
+
+	public Piece getPiece(int y, int x) {
+		return myPieces[y][x];
+	}
+
+	public int[] getCoords(Piece p) {
+		return null;
+	}
+
+	public Tray getParent() {
+		return parent;
+	}
+
+	public void print() {
+		for (int i = 0; i < myYLength; i++) {
+			for (int j = 0; j < myXLength; j++) {
+				if (myPieces[i][j] == null) {
+					System.out.print("-");
+				} else {
+					System.out.print("X");
+				}
+			}
+			System.out.println("");
+		}
+		System.out.println("");
+	}
+
+//	public boolean trayMatch(Tray goal) {
+//		for (int i = 0; i < myYLength; i++) {
+//			for (int j = 0; j < myXLength; j++) {
+//				if (goal.getPieces()[i][j] != null) {
+//					if (getPiece(i, j) != null) {
+//						Piece p1 = goal.getPiece(i, j);
+//						Piece p2 = getPiece(i, j);
+//						if (p1.height() != p2.height()
+//								|| p1.width() != p2.width()) {
+//							return false;
+//						}
+//					} else {
+//						return false;
+//					}
+//				}
+//			}
+//		}
+//		return true;
+//	}
+	//////
+	public boolean trayMatch(Tray goal) {
+		ArrayList<int[]> goalConfig = goal.getConfiguration();
+		for (int i = 0; i < goalConfig.size(); i++) {
+			Piece p = goal.getPiece(goalConfig.get(i));
+			Piece p2 = getPiece(goalConfig.get(i));
+			if (!p.equals(p2)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public Piece getPiece(int[] pieceCord) {
+		return myPieces[pieceCord[0]][pieceCord[1]];
+	}
+
+	public ArrayList<int[]> getConfiguration() {
+		return configuration;
+	}
+	////
+	public Tray moveUp(Piece p) {
+		int[] coords = p.getCoords();
+		int[] newCoords = new int[4];
+		newCoords[0] = coords[0] - 1;
+		newCoords[1] = coords[1];
+		newCoords[2] = coords[2] - 1;
+		newCoords[3] = coords[3];
+		int[] move = { coords[0], coords[1], newCoords[0], newCoords[1] };
+		return move(p, newCoords, move);
+	}
+
+	public Tray moveDown(Piece p) {
+		int[] coords = p.getCoords();
+		int[] newCoords = new int[4];
+		newCoords[0] = coords[0] + 1;
+		newCoords[1] = coords[1];
+		newCoords[2] = coords[2] + 1;
+		newCoords[3] = coords[3];
+		int[] move = { coords[0], coords[1], newCoords[0], newCoords[1] };
+		return move(p, newCoords, move);
+	}
+
+	public Tray moveLeft(Piece p) {
+		int[] coords = p.getCoords();
+		int[] newCoords = new int[4];
+		newCoords[0] = coords[0];
+		newCoords[1] = coords[1] - 1;
+		newCoords[2] = coords[2];
+		newCoords[3] = coords[3] - 1;
+		int[] move = { coords[0], coords[1], newCoords[0], newCoords[1] };
+		return move(p, newCoords, move);
+	}
+
+	public Tray moveRight(Piece p) {
+		int[] coords = p.getCoords();
+		int[] newCoords = new int[4];
+		newCoords[0] = coords[0];
+		newCoords[1] = coords[1] + 1;
+		newCoords[2] = coords[2];
+		newCoords[3] = coords[3] + 1;
+		int[] move = { coords[0], coords[1], newCoords[0], newCoords[1] };
+		return move(p, newCoords, move);
+	}
+
+	private Tray move(Piece p, int[] coordinates, int[] move) {
+		Tray afterMove = new Tray(myYLength, myXLength, move, this);
+		for (Piece piece : pieces) {
+			if (piece == p) {
+				afterMove.add(coordinates);
+			} else {
+				afterMove.add(piece.getCoords());
+			}
+		}
+		return afterMove;
+	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.deepHashCode(myPieces);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+//		Tray compare = (Tray) o;
+//		Piece[][] compareBoard = compare.getBoard();
+//		for (int i = 0; i < myYLength; i++) {
+//			for (int j = 0; j < myXLength; j++) {
+//				if (myPieces[i][j] != null) {
+//					if (compareBoard[i][j] != null) {
+//						if (!myPieces[i][j].equals(compareBoard[i][j])) {
+//							return false;
+//						}
+//					} else {
+//						return false;
+//					}
+//				}
+//			}
+//		}
+//		return true;
+		int [][] compare = ((Tray) o).getMyPiecesInt();
+		return Arrays.deepEquals(getMyPiecesInt(), compare);
+	
+	}
+
+	public Piece[][] getBoard() {
+		return myPieces;
+	}
+
+	public boolean canMoveUp(Piece p) {
+		int x = p.getX();
+		int y = p.getY();
+		if (y - 1 >= 0) {
+			for (int i = 0; i < p.width(); i++) {
+				if (myPieces[y - 1][x + i] != null) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public boolean canMoveDown(Piece p) {
+		int x = p.getX();
+		int y = p.getY();
+		if (y + p.height() < myYLength) {
+			for (int i = 0; i < p.width(); i++) {
+				if (myPieces[y + p.height()][x + i] != null) {
+					return false;
+				}
+			}
+			return true;
+
+		}
+		return false;
+	}
+
+	public boolean canMoveLeft(Piece p) {
+		int x = p.getX();
+		int y = p.getY();
+		if (x - 1 >= 0) {
+			for (int i = 0; i < p.height(); i++) {
+				if (myPieces[y + i][x - 1] != null) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public boolean canMoveRight(Piece p) {
+		int x = p.getX();
+		int y = p.getY();
+		if (x + p.width() < myXLength) {
+			for (int i = 0; i < p.height(); i++) {
+				if (myPieces[y + i][x + p.width()] != null) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public LinkedList<Tray> neighbors() {
+		return possibleMoves;
+	}
+
+	private class Piece {
+		private int[] myCoords;
+
+		public Piece(int y, int x, int[] coordinates) {
+			myCoords = coordinates;
+		}
+
+		public int height() {
+			return myCoords[2] - myCoords[0] + 1;
+		}
+
+		public int width() {
+			return myCoords[3] - myCoords[1] + 1;
+		}
+
+		public int getY() {
+			return myCoords[0];
+		}
+
+		public int getX() {
+			return myCoords[1];
+		}
+
+		public int[] getCoords() {
+			return myCoords;
+		}
+
+		@Override
+		public int hashCode() {
+			String hash = "";
+			hash += getY();
+			hash += height();
+			hash += getX();
+			hash += width();
+			return Integer.parseInt(hash);
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			Piece p = (Piece) o;
+			if (p == null) {
+				return false;
+			}
+			return Arrays.equals(myCoords, p.getCoords());
+		}
+	
+	}
+}

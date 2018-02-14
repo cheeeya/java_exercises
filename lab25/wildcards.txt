@@ -1,0 +1,1 @@
+there is no way to add anything to the ArrayList of wildcard type, other than null. This happens because the compiler cannot confirm if the type of obejct you are passing in through add is compatible with the type <? extends Point>

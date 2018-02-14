@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="feelings/" kind="src" path="emotions/deep"/>
+	<classpathentry kind="src" path="emotions/deep/feelings"/>
+	<classpathentry kind="lib" path="stdlib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Samuel/workspace/lab25/stdlib.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

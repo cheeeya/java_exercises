@@ -1,0 +1,26 @@
+package practice;
+
+
+public class Zombie {
+
+	public static String fastMultiply(String s, int N) {
+	    StringBuilder results = new StringBuilder(s); // create a StringBuilder from s
+	    for (int i = 0; i < N; i++) {
+	        results.append(s); // use StringBuilder's fast append
+	    }
+	    return results.toString(); // turn the StringBuilder back into a String
+	}
+	
+	public static String multiply(String s, int N) {
+	    String results = s;
+	    for (int i = 0; i < N; i++) {
+	        results += s;
+	    }
+	    return results;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(Zombie.multiply("dog", 700));
+		
+	}
+}

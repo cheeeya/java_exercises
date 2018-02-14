@@ -1,0 +1,10 @@
+import java.io.File;
+import java.util.Scanner;
+
+public class PFind {
+	public static void main(String [] args){
+		File puzz = new File("puzzle.stuff");
+		Scanner sc = new Scanner(puzz);
+		
+	}
+}

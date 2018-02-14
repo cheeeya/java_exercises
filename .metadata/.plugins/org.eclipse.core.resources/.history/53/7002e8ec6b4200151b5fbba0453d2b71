@@ -1,0 +1,19 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class KruskalsTest {
+
+	@Test
+	public void test() {
+		EdgeWeightedGraph g = new EdgeWeightedGraph(5, 10);
+		for (Edge e: g.edges()){
+			int v = e.either();
+			System.out.println(v + " to " + e.other(v) + "  " + e.weight());
+		}
+		EdgeWeightedGraph mst = Kruskals.mst(g);
+		System.out.println(mst);
+
+	}
+
+}
